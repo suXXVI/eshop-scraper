@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
+from db import insert_game
 
 # headless browser setup
 options = Options()
@@ -43,25 +44,29 @@ while True:
     cards = grid_container.find_elements(By.CLASS_NAME, "y83ib")
     print(f"{len(cards)} games scraped.")
     
+    # loop through cards and extract info
+    for card in cards:
+        try:
+            title_tag = card.find_element(By.TAG_NAME, "h2")
+            price_tag = card.find_element(By.TAG_NAME, "span")
+            link_tag = card.find_element(By.TAG_NAME, "a")
+            thumbnail_tag = card.find_element(By.TAG_NAME, "img")
+            release_date_tag = card.find_element(By.CLASS_NAME, "k9MOS")
+            
 
 
-# loop through cards and extract info
-for card in cards:
-    try:
-        title_tag = card.find_element(By.TAG_NAME, "h2")
-        price_tag = card.find_element(By.TAG_NAME, "span")
-        link_tag = card.find_element(By.TAG_NAME, "a")
-        thumbnail_tag = card.find_element(By.TAG_NAME, "img")
-        release_date_tag = card.find_element(By.CLASS_NAME, "k9MOS")
+            title = title_tag.text.strip()
+            price = price_tag.text.strip()
+            link = link_tag.get_attribute("href")
+            thumbnail = thumbnail_tag.get_attribute("src")
+            release_date = release_date_tag.text.strip();
+            
+            driver.get(link)
 
-        title = title_tag.text.strip()
-        price = price_tag.text.strip()
-        link = link_tag.get_attribute("href")
-        thumbnail = thumbnail_tag.get_attribute("src")
-        release_date = release_date_tag.text.strip();
-
-        print(f"{title:<60} | {price:<10} | {release_date:<30}")
-    except Exception as e:
-        print("Error parsing card:", e)
+            print(f"{title:<60} | {price:<10}")
+            # insert_game(title, price, release_date, thumbnail)
+        except Exception as e:
+            print("Error parsing card:", e)
+    
 
 driver.quit()
