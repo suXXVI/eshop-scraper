@@ -15,9 +15,9 @@ driver = webdriver.Chrome(options=options)
 url = "https://www.nintendo.com/us/store/games/#products"
 driver.get(url)
 
-# wait for the game grid to load
+# wait for the grid to load
 try:
-    # Wait for parent container first
+    print("Initializing...")
     parent_container = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, "cedmum"))
     )
@@ -27,9 +27,8 @@ except Exception as e:
     exit()
 
 
-# Keep clicking "Load more results" until it disappears
+# clicking "Load more results" until 0 results
 while True:
-    print('scraping...');
     try:
         load_more_button = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Load more results"]]'))
@@ -42,7 +41,7 @@ while True:
 
     grid_container = parent_container.find_element(By.CLASS_NAME, "ljMhgM")
     cards = grid_container.find_elements(By.CLASS_NAME, "y83ib")
-    print(f"{len(cards)} games")
+    print(f"{len(cards)} games scraped.")
     
 
 
@@ -53,13 +52,15 @@ for card in cards:
         price_tag = card.find_element(By.TAG_NAME, "span")
         link_tag = card.find_element(By.TAG_NAME, "a")
         thumbnail_tag = card.find_element(By.TAG_NAME, "img")
+        release_date_tag = card.find_element(By.CLASS_NAME, "k9MOS")
 
         title = title_tag.text.strip()
         price = price_tag.text.strip()
         link = link_tag.get_attribute("href")
         thumbnail = thumbnail_tag.get_attribute("src")
+        release_date = release_date_tag.text.strip();
 
-        print(f"{title:<60} | {price:<10}")
+        print(f"{title:<60} | {price:<10} | {release_date:<30}")
     except Exception as e:
         print("Error parsing card:", e)
 
