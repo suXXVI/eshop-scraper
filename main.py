@@ -3,12 +3,12 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from bs4 import BeautifulSoup
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
 
 # setup headless browser
 options = Options()
-options.headless = True
+options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
 
 # load up the eshop
@@ -21,18 +21,33 @@ try:
     parent_container = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, "cedmum"))
     )
+except Exception as e:
+    print("Error:", e)
+    driver.quit()
+    exit()
 
-    # Then find the grid inside the parent
+
+# Keep clicking "Load more results" until it disappears
+while True:
+    print('loading games...');
+    try:
+        load_more_button = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Load more results"]]'))
+        )
+        load_more_button.click()
+        time.sleep(2)  # Give time for new products to load
+    except (TimeoutException, NoSuchElementException):
+        print("No more 'Load more results' button found.")
+        break
+
+
+# Then find the grid inside the parent
     grid_container = parent_container.find_element(By.CLASS_NAME, "ljMhgM")
 
     # Then find all the cards inside the grid
     cards = grid_container.find_elements(By.CLASS_NAME, "y83ib")
     print(len(cards))
 
-except Exception as e:
-    print("Error:", e)
-    driver.quit()
-    exit()
 
 # loop through cards and extract info
 for card in cards:
