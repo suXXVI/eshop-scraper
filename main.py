@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
 
-# setup headless browser
+# headless browser setup
 options = Options()
 options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
@@ -29,7 +29,7 @@ except Exception as e:
 
 # Keep clicking "Load more results" until it disappears
 while True:
-    print('loading games...');
+    print('scraping...');
     try:
         load_more_button = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Load more results"]]'))
@@ -40,13 +40,10 @@ while True:
         print("No more 'Load more results' button found.")
         break
 
-
-# Then find the grid inside the parent
     grid_container = parent_container.find_element(By.CLASS_NAME, "ljMhgM")
-
-    # Then find all the cards inside the grid
     cards = grid_container.find_elements(By.CLASS_NAME, "y83ib")
-    print(len(cards))
+    print(f"{len(cards)} games")
+    
 
 
 # loop through cards and extract info
@@ -62,7 +59,7 @@ for card in cards:
         link = link_tag.get_attribute("href")
         thumbnail = thumbnail_tag.get_attribute("src")
 
-        print(f"{title:<60} | {price:<10} | {link}")
+        print(f"{title:<60} | {price:<10}")
     except Exception as e:
         print("Error parsing card:", e)
 
