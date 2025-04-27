@@ -9,5 +9,14 @@
 ## Step 3
 To start scraping `pythron3 main.py`
 
+
+### Can scraped the following
+- Game name
+- Game price
+- Release date
+- Game description
+- Game Thumbnail
+
+### Supabase
 Replace supabase information with your own.
 Scraped games will be added to the database as they are scraped.
