@@ -1,14 +1,4 @@
-# How to use
-
-## Step 1
-`python3 venv .venv`
-
-## Step 2
-`source .venv/bin/activate`
-
-## Step 3
-To start scraping `pythron3 main.py`
-
+<h1 align="center">Nintendo Eshop Scraper</h1>
 
 ### Can scraped the following
 - Game name
@@ -20,3 +10,24 @@ To start scraping `pythron3 main.py`
 ### Supabase
 Replace supabase information with your own.
 Scraped games will be added to the database as they are scraped.
+
+
+### 1. Create a virtual environment
+```bash
+  python3 -m venv .venv
+```
+
+### 2. Activate the virtual environment 
+```bash
+  source .venv/bin/activate
+```
+
+### 3. Install dependencies
+````bash 
+  pip3 install -r requirements.txt
+````
+
+### 4. Run the scraper
+```bash 
+  python3 main.py
+```
