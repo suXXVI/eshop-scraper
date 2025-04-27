@@ -1,4 +1,4 @@
-<h1 align="center">Nintendo Eshop Scraper</h1>
+<h1 align="center">Nintendo Eshop Scraper w/ Supabase Integration</h1>
 
 ### Can scraped the following
 - Game name
