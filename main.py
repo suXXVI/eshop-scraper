@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 from db import insert_game
 
-# Setup chrome options
+# Chrome options
 def get_chrome_options():
     options = Options()
     options.add_argument("--headless")
@@ -36,7 +36,7 @@ except Exception as e:
     
 count = 0
 
-# click "Load more results" until none
+# click "Load more results" until no more games to load
 while True:
     try:
         load_more_button = WebDriverWait(list_driver, 5).until(
@@ -84,7 +84,7 @@ for card in cards:
 
 print(f"{len(games_data)} games collected.")
 
-list_driver.quit()  # Done with main driver!
+list_driver.quit()
 
 # Function to visit each game's page
 def fetch_and_insert(game):
